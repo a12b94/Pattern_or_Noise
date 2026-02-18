@@ -1,4 +1,4 @@
-# Pattern_or_Noise
+# Pattern or noise
 
 # Introduction
 Financial Time Series exhibit white noise. Raw prices can not be used for statistical analyses because the assumption for stationarity is not given (most of the time). While prices violates the assumption for stationarity, daily returns do not. 
@@ -26,12 +26,31 @@ Another example is shown in the image below. Pattern or methodological error?
 <img width="1189" height="589" alt="image" src="https://github.com/user-attachments/assets/08833fd5-98ec-43be-b84f-8087a1e2d0ca" />
 
 It looks like a beautiful and mostly perfect linear relationship. But the data overlaps in the shifted series. This explains the mostly perfect linear relationship. 
-The correct plot is visible at the end. 
-
-To reduce the likelihood of data snooping bias, curve fitting and methodological erros, monte carlo simulations with randomness provides a good approach. 
+The correct plot is visible at the end.  
 
 # Objective
-The objective is not to evaluate the strategy performance on real data, but to evaluate performance under randomness. 
+The objective is not to evaluate the strategy performance on real data, but to evaluate performance under randomness. For this purpose, a monte carlo apporach with geometric brownian motion is used. The research goal is clear: Does a stragey capture some real world phenomena or is the performance only good because rules or parameters are tweaked?
+
+# Methodology 
+Constant strategy rules are applied on simulated universes. A baseline or zero-distribution will be generated. Based on this zero-distribution the "real" alpha can be judged. 
+For demonstration purposes only the distribution from the simulated "Information Ratios" is shown. 
+A "null-hypothesis" can be constructed based on the confidence intervall from the zero-distribution. 
+
+H0: The strategy performance is due to chance.
+HA: The strategy performance is due to a real pattern in the data. 
+
+Alternative the p-value can be calculated.
+
+# Results
+
+<img width="986" height="505" alt="image" src="https://github.com/user-attachments/assets/d09ba434-0816-4008-a2c1-183055e6543c" />
+
+# Real Momentum Plot
+
+<img width="1189" height="589" alt="image" src="https://github.com/user-attachments/assets/a9227719-e1a7-4480-820f-00d1e6176876" />
+
+
+
 
 
 
