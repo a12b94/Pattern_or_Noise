@@ -1,51 +1,97 @@
 # Pattern or noise
 
 # Introduction
-Financial Time Series exhibit white noise. Raw prices can not be used for statistical analyses because the assumption for stationarity is not given (most of the time). While prices violates the assumption for stationarity, daily returns do not. 
+Financial time series often resemble white noise.
+Raw price leves are typically non-stationary and therefore unsuitable for statistical analysis. However, daily returns are generally closer to stationary processes and are therefore commonly used in quantitative finance.
 
-It is not easy to distinguish between real returns and white noise. In the following plot Bitcoins daily returns and generated white noise are shown. Which one of these two is real? 
+Yet, distinguishing between genuine market behavior and random noise is not straightforward.
+
+The following figure compares Bitcoin daily returns with generated white noise.
+At first glance, both series appear similar.
+
+Which of the two is real?
 
 <img width="1312" height="659" alt="image" src="https://github.com/user-attachments/assets/22e64c83-b796-4679-95c2-e2f0ecc26420" />
 
-In fact, one assumption of stationarity is the constant variance over time. One sequence exhibts periods where the variance is relatively low and hence, is not generated. 
-But when returns behave like white noise, how is it possible that Bitcoin had such a great performance over the last years? 
+One key assumption of stationarity is constant variance over time.
+Closer inspection reveals that one series exhibits periods of chaning volatility. A characteristic not consistent with pure white noise.
 
-Is it possible that daily returns are autocorrelated? Autocorrelation is in this case something like momentum.
-A scatter plot with daily returns and white noise are visible in the next image. When autocorrelation exists, a linear relationship in daily returns could be present. 
-For comparison purposes white noise and shifted values from white noise are also shown in the image.
+But this raises a fundamental question:
+If daily returns behave like white noise, how could Bitcoin achieve such extraordinary long-term performance?
+
+# Are Returns Predictable?
+
+One possible explanation is autocorrelation. Commonly referred to as momentum. 
+
+If momentum exists, past returns should contain some information about future returns.
+This can be visualized using scatter plots comparing returns with their lagged values.
+
+The next figure shows:
+- Bitcoin daily returns vs. lagged returns
+- White noise vs. shifted white noise
 
 <img width="1331" height="679" alt="image" src="https://github.com/user-attachments/assets/7776adda-2aa3-4070-9e58-0803650af39c" />
 
-Which one of these is generated? First, it doesn't matter. Both are looking like the data comes from the same distribution. And the correlation coefficent for both series is approximately the same:
-Bitcoin: -0.0330009. White noise: -0.01952083. Daily returns are clearly independent from each other. 
-When Bitcoin had such a great performance over the last years and daily returns behave like white noise, why is no clear pattern visible?  
+At first glance, both appear drawn from the same distribution. 
+The correlation coefficients confirm this:
+- Bitcoin: -0.033
+- White noise: -0.020
+This suggests that daily returns are largely independent.
 
-Or the problem should be adressed backward: How is it possible to quantify momentum? 
+This leads to another paradox:
+If returns look like white noise and show little autocorrelation, why do long-term trends exist?
 
-Another example is shown in the image below. Pattern or methodological error?
-<img width="1189" height="589" alt="image" src="https://github.com/user-attachments/assets/08833fd5-98ec-43be-b84f-8087a1e2d0ca" />
+# Quantifying Momentum - A Methodological Trap
 
-It looks like a beautiful and mostly perfect linear relationship. But the data overlaps in the shifted series. This explains the mostly perfect linear relationship. 
-The correct plot is visible at the end.  
+Momentum is often measured as the rate of change or rolling returns over longer horizons.
+
+The following figure appears to show an almost perfect linear relationship.
+
+<img width="1189" height="589" alt="image" src="https://github.com/user-attachments/assets/08833fd5-98ec-43be-b84f-8087a1e2d0ca" /> 
+
+However, this is a methodological illusion.
+
+The apparent relationship arises because the windows overlap, creating a high correlation. Once overlapping is removed, the relationship becomes far weaker and more realistic.
 
 # Objective
-The objective is not to evaluate the strategy performance on real data, but to evaluate performance under randomness. For this purpose, a monte carlo apporach with geometric brownian motion is used. The research goal is clear: Does a stragey capture some real world phenomena or is the performance only good because rules or parameters are tweaked?
+The objective of this project is not to evaluate strategy performance on historical data, but rather to asses how strategies behave under randomness.
+
+To achieve this, a Monte Carlo framework based on geometric Brownian motions is used.
+
+The core research question is:
+Does a strategy capture genuine market structure, or does its performance arise purely from chance?
 
 # Methodology 
-Constant strategy rules are applied on simulated universes. A baseline or zero-distribution will be generated. Based on this zero-distribution the "real" alpha can be judged. 
-For demonstration purposes only the distribution from the simulated "Information Ratios" is shown. 
-A "null-hypothesis" can be constructed based on the confidence intervall from the zero-distribution. 
 
-H0: The strategy performance is due to chance.
-HA: The strategy performance is due to a real pattern in the data. 
+A fixed strategy is applied to thousand of simulated market universes.
 
-Alternative the p-value can be calculated.
+This produces a baseline distribution. A "zero-distribution", representing performance under pure randomness. 
+
+From this distribution, statistical inference becomes possible.
+
+Two approaches are used:
+-Confidence intervals for hypothesis testing
+-p-value estimation
+
+Hypotheses:
+H0: Strategy performance is due to chance.
+HA: Strategy performance reflects a genuine market pattern.
 
 # Results
 
+The following figure shows the distribution of simulated Information Ratios under the null hypothesis.
+
 <img width="986" height="505" alt="image" src="https://github.com/user-attachments/assets/d09ba434-0816-4008-a2c1-183055e6543c" />
 
-# Real Momentum Plot
+This provides a benchmark against which real strategy performance can be evaluated.
+
+# Real Momentum Example
+
+Finally, the corrected momentum scatter plot illustrates the key insight:
+
+Even in Bitcoin, predictive relationships are weak and contains some noise.
+
+Momentum exists, but its signal-to-noise ratio is very low.
 
 <img width="1189" height="589" alt="image" src="https://github.com/user-attachments/assets/a9227719-e1a7-4480-820f-00d1e6176876" />
 
