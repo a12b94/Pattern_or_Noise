@@ -70,12 +70,14 @@ This produces a baseline distribution. A "zero-distribution", representing perfo
 From this distribution, statistical inference becomes possible.
 
 Two approaches are used:
--Confidence intervals for hypothesis testing
--p-value estimation
+
+- Confidence intervals for hypothesis testing
+- p-value estimation
 
 Hypotheses:
-H0: Strategy performance is due to chance.
-HA: Strategy performance reflects a genuine market pattern.
+
+- H0: Strategy performance is due to chance.
+- HA: Strategy performance reflects a genuine market pattern.
 
 # Results
 
@@ -84,6 +86,8 @@ The following figure shows the distribution of simulated Information Ratios unde
 <img width="986" height="505" alt="image" src="https://github.com/user-attachments/assets/d09ba434-0816-4008-a2c1-183055e6543c" />
 
 This provides a benchmark against which real strategy performance can be evaluated.
+
+For example: If the Information Ratio calculated from real strategy performance is in the tails, especially in the right tail, this suggests that the null hypothesis is unlikely true.
 
 # Real Momentum Example
 
@@ -94,6 +98,49 @@ Even in Bitcoin, predictive relationships are weak and contains some noise.
 Momentum exists, but its signal-to-noise ratio is very low.
 
 <img width="1189" height="589" alt="image" src="https://github.com/user-attachments/assets/a9227719-e1a7-4480-820f-00d1e6176876" />
+
+# Code snippets
+
+For the simulated prices, the following function was written.
+
+    def simulate_gbm_prices(S0, annualized_drift, annualized_volatility, dt, length):
+
+      prices = np.empty([length, 1]) # -> Shape of the column Vector N X 1, while 1 stands for one column
+      wiener_process = np.random.RandomState().normal(loc = annualized_drift * dt, scale = annualized_volatility * np.sqrt(dt), size=length)
+      gbm_returns = np.exp(wiener_process)
+
+      prices[0] = S0
+      prices = prices[0] * np.cumprod(gbm_returns)
+
+      return prices
+
+And for the simulation process, the next function was helpful:
+    
+    def simulate_universe(asset_info):
+
+      randomized_universe = {"open": [], "transaction_volume": [], "ticker": [],
+                           "dates": []}
+
+      for info in asset_info:
+
+        random_prices = simulate_gbm_prices(
+                                            S0=info["S0"],
+                                            annualized_drift=info["drift"],
+                                            annualized_volatility=info["volatility"],
+                                            dt=info["dt"],
+                                            length=info["steps"]
+                                            )
+
+        shuffled_volume = info["transaction_volume"].copy()
+        np.random.shuffle(shuffled_volume)
+
+
+        randomized_universe["open"].extend(random_prices)
+        randomized_universe["transaction_volume"].extend(shuffled_volume)
+        randomized_universe["ticker"].extend([info["ticker"]] * info['steps'])
+        randomized_universe["dates"].extend(info["dates"])
+
+      return pd.DataFrame(randomized_universe)
 
 
 
